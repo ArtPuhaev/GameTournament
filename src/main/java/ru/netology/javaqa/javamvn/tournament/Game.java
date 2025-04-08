@@ -1,17 +1,17 @@
 package ru.netology.javaqa.javamvn.tournament;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Game {
-    private ArrayList<Player> players = new ArrayList<>();
+    private HashMap<String, Integer> map = new HashMap<>();
 
     public void register(Player player) {
-        players.add(player);
+        map.put(player.getName(), player.getStrength());
     }
 
     public int round(String playerName1, String playerName2) {
-        int strengthP1 = findPlayer(playerName1).getStrength();
-        int strengthP2 = findPlayer(playerName2).getStrength();
+        int strengthP1 = findPlayer(playerName1);
+        int strengthP2 = findPlayer(playerName2);
         if (strengthP1 > strengthP2) {
             return 1;
         } else if (strengthP1 < strengthP2) {
@@ -20,12 +20,10 @@ public class Game {
         return 0;
     }
 
-    private Player findPlayer(String playerName) {
-        for (Player player : players) {
-            if (player.getName().equals(playerName)) {
-                return player;
-            }
+    private int findPlayer(String playerName) {
+        if (!map.containsKey(playerName)) {
+            throw new NotRegisteredException(playerName);
         }
-        throw new NotRegisteredException(playerName);
+        return map.get(playerName);
     }
 }
